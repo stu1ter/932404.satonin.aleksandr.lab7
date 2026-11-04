@@ -6,15 +6,12 @@ const ArticlesModel = {
         let sql = "SELECT * FROM articles";
         const params = [];
 
-        // Логика query ?published=true
         if (publishedQuery === 'true') {
             sql += " WHERE is_published = 1";
         }
 
-        // Дополнительно: сортировка по дате публикации (новые сверху)
-        // Сначала идут опубликованные по убыванию даты, затем черновики (где даты нет)
+        // Сначала идут опубликованные по убыванию даты, затем черновики
         sql += " ORDER BY published_at DESC, id DESC";
-
         db.all(sql, params, (err, rows) => {
             callback(err, rows);
         });
@@ -30,7 +27,6 @@ const ArticlesModel = {
 
     // Обновление (Публикация статьи)
     publishArticle: (id, callback) => {
-        // Ставим is_published = 1 и published_at = NOW() (в SQLite это datetime('now'))
         const sql = `UPDATE articles SET
                      is_published = 1,
                      published_at = datetime('now')

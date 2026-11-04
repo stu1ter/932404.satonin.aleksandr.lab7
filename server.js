@@ -4,12 +4,11 @@ const ArticlesModel = require('./db_crud');
 const app = express();
 const PORT = 3000;
 
-// Мидлвар для парсинга JSON в запросах
 app.use(express.json());
 
 // 1. GET /api/articles - Получение списка статей
 app.get('/api/articles', (req, res) => {
-    const publishedQuery = req.query.published; // Читаем query-параметр
+    const publishedQuery = req.query.published;
 
     ArticlesModel.getAllArticles(publishedQuery, (err, rows) => {
         if (err) {
@@ -26,7 +25,6 @@ app.get('/api/articles', (req, res) => {
 app.post('/api/articles', (req, res) => {
     const { title, content } = req.body;
 
-    // Ошибка: попытка опубликовать/создать без title → 400
     if (!title || title.trim() === "") {
         return res.status(400).json({ error: "Поле 'title' обязательно для заполнения" });
     }
@@ -79,7 +77,6 @@ app.delete('/api/articles/:id', (req, res) => {
     });
 });
 
-// Запуск сервера
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
